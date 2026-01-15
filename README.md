@@ -8,6 +8,12 @@ Missing Laravel / Tailwind v4.1 & Daisy UI 5.1.14 Javascript Plugins for interac
 npm install @doyosi/laraisy
 ```
 
+Or clone the repository:
+
+```bash
+git clone https://github.com/Doyosi/Laraisy.git
+```
+
 ## Usage
 
 Import the components you need:

@@ -23,6 +23,14 @@
     ],
     "author": "Doyosi",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Doyosi/Laraisy.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Doyosi/Laraisy/issues"
+    },
+    "homepage": "https://github.com/Doyosi/Laraisy#readme",
     "peerDependencies": {
         "axios": "^1.0.0",
         "tippy.js": "^6.0.0"
