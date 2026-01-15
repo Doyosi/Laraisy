@@ -7,7 +7,7 @@
 Ensure `DSRestore.js` and `DSAlert.js` are available in your assets.
 
 ```javascript
-import DSRestore from './Plugins/DSRestore.js';
+import { DSRestore } from '@doyosi/laraisy';
 // Initialize globally or per page, ideally OUTSIDE render loops
 const dsRestore = new DSRestore();
 ```

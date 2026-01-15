@@ -19,7 +19,7 @@ A lightweight, dependency-free JavaScript plugin for tab switching with button/l
 Import the plugin in your JavaScript file:
 
 ```javascript
-import { DSTabs } from '../Plugins/DSTabs.js';
+import { DSTabs } from '@doyosi/laraisy';
 ```
 
 ---
@@ -66,7 +66,7 @@ import { DSTabs } from '../Plugins/DSTabs.js';
 ### 2. Initialize the plugin
 
 ```javascript
-import { DSTabs } from '../Plugins/DSTabs.js';
+import { DSTabs } from '@doyosi/laraisy';
 
 const tabs = new DSTabs('#myTabContainer');
 ```
@@ -295,7 +295,7 @@ tabs.off('change');
 ### Basic Implementation
 
 ```javascript
-import { DSTabs } from '../Plugins/DSTabs.js';
+import { DSTabs } from '@doyosi/laraisy';
 
 // Initialize
 const tabs = new DSTabs('#pageImagesCard');
@@ -345,7 +345,7 @@ tabs.on('change', ({ tab, prevTab }) => {
 
 ```javascript
 // In your PageCreate.js
-import { DSTabs } from '../../../Plugins/DSTabs.js';
+import { DSTabs } from '@doyosi/laraisy';
 
 // Find the card containing the image tabs
 const imageCard = document.querySelector('.tabs')?.closest('section, article, div[class*="card"]');

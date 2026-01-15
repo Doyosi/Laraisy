@@ -7,7 +7,7 @@ A flexible, customizable slider plugin supporting multiple data sources (ajax, j
 Import the plugin in your JavaScript file:
 
 ```javascript
-import DSSimpleSlider from '../Plugins/DSSimpleSlider.js';
+import { DSSimpleSlider } from '@doyosi/laraisy';
 ```
 
 ## Quick Start
@@ -192,7 +192,7 @@ dataMap: {
 </div>
 
 <script type="module">
-import DSSimpleSlider from './Plugins/DSSimpleSlider.js';
+import { DSSimpleSlider } from '@doyosi/laraisy';
 
 new DSSimpleSlider('#premiumDomainsSlider', {
     source: 'ajax',

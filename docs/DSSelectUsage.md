@@ -26,7 +26,7 @@ The DSSelect plugin is automatically initialized on page load for elements with 
 For manual initialization, import the plugin:
 
 ```javascript
-import { DSSelect } from '../Plugins/DSSelect.js';
+import { DSSelect } from '@doyosi/laraisy';
 ```
 
 ---
@@ -655,7 +655,7 @@ const select = new DSSelect('#mySelect', {
 ### JavaScript Integration
 
 ```javascript
-import { DSSelect } from '../Plugins/DSSelect.js';
+import { DSSelect } from '@doyosi/laraisy';
 
 document.addEventListener('DOMContentLoaded', () => {
     const categorySelect = DSSelect.getInstance('[data-name="category_id"]');

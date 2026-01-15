@@ -19,11 +19,11 @@ DSForm is a modern, feature-rich AJAX form handler for Laravel applications. It 
 
 ## Installation
 
-DSForm is located at `resources/assets/Plugins/DSForm.js`. Import it in your page-specific JavaScript:
+Import the plugin in your page-specific JavaScript:
 
 ```javascript
-import { DSForm } from '../../Plugins/DSForm.js';
-import { DSAlert } from '../../Plugins/DSAlert.js';
+import { DSForm } from '@doyosi/laraisy';
+import { DSAlert } from '@doyosi/laraisy';
 
 // DSAlert must be globally available for toasts/modals
 window.DSAlert = DSAlert;
@@ -36,7 +36,7 @@ window.DSAlert = DSAlert;
 ### Minimal Example
 
 ```javascript
-import { DSForm } from '../../Plugins/DSForm.js';
+import { DSForm } from '@doyosi/laraisy';
 
 const form = document.querySelector('#my-form');
 
@@ -46,8 +46,8 @@ new DSForm({ form }).bind();
 ### Standard Example (with all common options)
 
 ```javascript
-import { DSForm } from '../../Plugins/DSForm.js';
-import { DSAlert } from '../../Plugins/DSAlert.js';
+import { DSForm } from '@doyosi/laraisy';
+import { DSAlert } from '@doyosi/laraisy';
 
 window.DSAlert = DSAlert;
 
@@ -291,8 +291,8 @@ new DSForm({
 ### Registration Form
 
 ```javascript
-import { DSForm } from '../../Plugins/DSForm.js';
-import { DSAlert } from '../../Plugins/DSAlert.js';
+import { DSForm } from '@doyosi/laraisy';
+import { DSAlert } from '@doyosi/laraisy';
 
 window.DSAlert = DSAlert;
 
@@ -323,8 +323,8 @@ new DSForm({
 ### Page Creation with TinyMCE
 
 ```javascript
-import { DSForm } from '../../../Plugins/DSForm.js';
-import { DSAlert } from '../../../Plugins/DSAlert.js';
+import { DSForm } from '@doyosi/laraisy';
+import { DSAlert } from '@doyosi/laraisy';
 
 window.DSAlert = DSAlert;
 

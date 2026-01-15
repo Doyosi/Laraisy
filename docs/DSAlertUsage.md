@@ -24,13 +24,13 @@ Since DSAlert is a single ES6 module, you can drop it directly into your project
 
 ### **1. Import the Module**
 
-import \{ DSAlert \} from './path/to/DSAlert.js';
+import { DSAlert } from '@doyosi/laraisy';
 
 ### **2. (Optional) Global Scope**
 
 If you are migrating legacy code or want to use it in inline script tags:
 
-import \{ DSAlert \} from './DSAlert.js';
+import { DSAlert } from '@doyosi/laraisy';
 window.Swal = DSAlert; // Spoof SweetAlert2
 window.DSAlert = DSAlert;
 
@@ -375,7 +375,7 @@ Show/hide the dark overlay (modals only).
 
 You can change the default settings globally for all alerts.
 
-import \{ DSAlert \} from './DSAlert.js';
+import { DSAlert } from '@doyosi/laraisy';
 
 DSAlert.defaults.confirmButtonColor = 'bg-purple-600 hover:bg-purple-700';
 DSAlert.defaults.backdrop = false; // Disable backdrop globally
@@ -390,8 +390,8 @@ DSAlert.icons.success = \`\<svg\> ... your custom svg ... \</svg\>\`;
 
 If you are using DSForm.js, you can easily integrate DSAlert to handle form notifications.
 
-import \{ DSForm \} from './DSForm.js';
-import \{ DSAlert \} from './DSAlert.js';
+import { DSForm } from '@doyosi/laraisy';
+import { DSAlert } from '@doyosi/laraisy';
 
 // Option 1: Global Spoofing (Easiest)
 window.Swal = DSAlert;

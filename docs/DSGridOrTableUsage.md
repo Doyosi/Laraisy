@@ -21,9 +21,9 @@ A flexible data display plugin for Laravel/Blade applications supporting **Table
 Import the plugin in your JavaScript file:
 
 ```javascript
-import DSGridOrTable from '../../../Plugins/DSGridOrTable.js';
+import { DSGridOrTable } from '@doyosi/laraisy';
 // Or for global usage:
-import { DSGridOrTable } from '../../../Plugins/DSGridOrTable.js';
+import { DSGridOrTable } from '@doyosi/laraisy';
 window.DSGridOrTable = DSGridOrTable;
 ```
 
@@ -495,7 +495,7 @@ document.querySelector('#my-custom-btn').addEventListener('click', () => {
 
 ```javascript
 // JavaScript
-import DSGridOrTable from '../../../Plugins/DSGridOrTable.js';
+import { DSGridOrTable } from '@doyosi/laraisy';
 
 const domainLogos = new DSGridOrTable('#domainLogosGrid', {
     type: 'grid',

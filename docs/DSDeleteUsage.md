@@ -7,7 +7,7 @@
 Ensure `DSDelete.js` and `DSAlert.js` are available in your assets.
 
 ```javascript
-import DSDelete from './Plugins/DSDelete.js';
+import { DSDelete } from '@doyosi/laraisy';
 // Initialize globally or per page
 const dsDelete = new DSDelete();
 ```

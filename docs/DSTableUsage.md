@@ -5,10 +5,10 @@
 
 ## Installation
 
-Ensure the `DSTable` files are located in `resources/assets/Plugins/`.
+Import the plugin:
 
 ```javascript
-import DSTable from './resources/assets/Plugins/DSTable.js';
+import { DSTable } from '@doyosi/laraisy';
 ```
 
 ## Basic Usage

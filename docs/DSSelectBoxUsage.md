@@ -5,7 +5,7 @@ A dual-list selector plugin for transferring items between two lists (left ↔ r
 ## Basic Usage
 
 ```javascript
-import DSSelectBox from '../Plugins/DSSelectBox.js';
+import { DSSelectBox } from '@doyosi/laraisy';
 
 const selectBox = new DSSelectBox('#container', {
     availableOptions: [

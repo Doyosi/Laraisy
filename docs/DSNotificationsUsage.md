@@ -5,7 +5,7 @@ Notification drawer management for Laravel dashboard.
 ## Quick Start
 
 ```javascript
-import { DSNotifications } from "../../Plugins/DSNotifications.js";
+import { DSNotifications } from "@doyosi/laraisy";
 
 // Auto-initializes if #notification-drawer exists
 // Or manually:
