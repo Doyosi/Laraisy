@@ -3,7 +3,7 @@
  * Fetches SVG files and injects them inline.
  * Replaces <svg> classes with those defined in data-class.
  */
-export default class DSSvgFetch {
+export class DSSvgFetch {
     constructor(options = {}) {
         this.config = {
             selector: '.icon-fetch-web',
