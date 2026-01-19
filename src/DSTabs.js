@@ -139,24 +139,33 @@ export class DSTabs {
     }
 
     _cacheElements() {
-        // Find all buttons with data-tab attribute within the container
+        // 1. Find Buttons (always in main container)
         this.buttons = Array.from(this.container.querySelectorAll(this.cfg.buttonSelector));
 
-        // Find the tabs container
-        this.tabsContainer = this.container.querySelector(this.cfg.tabsContainer);
-
-        // Find all radio inputs and content pairs within the tabs container
-        if (this.tabsContainer) {
-            this.radios = Array.from(this.tabsContainer.querySelectorAll(this.cfg.radioSelector));
-            this.contents = Array.from(this.tabsContainer.querySelectorAll(this.cfg.contentSelector));
+        // 2. Determine Scope for Content/Radios
+        // If tabsContainer is configured AND exists, strictly scope to it. 
+        // Otherwise, search within the entire main container (flexible mode).
+        let searchScope = this.container;
+        if (this.cfg.tabsContainer) {
+            const scopedEl = this.container.querySelector(this.cfg.tabsContainer);
+            if (scopedEl) {
+                this.tabsContainer = scopedEl;
+                searchScope = scopedEl;
+            } else {
+                this.tabsContainer = null;
+            }
         } else {
-            this.radios = [];
-            this.contents = [];
+            this.tabsContainer = null;
         }
 
-        // Build a map of tab name -> { button, radio, content }
+        // 3. Find Radios and Content within that scope
+        this.radios = Array.from(searchScope.querySelectorAll(this.cfg.radioSelector));
+        this.contents = Array.from(searchScope.querySelectorAll(this.cfg.contentSelector));
+
+        // 4. Initialize Map
         this._tabMap = new Map();
 
+        // Group buttons by tab name
         this.buttons.forEach(button => {
             const tabName = button.dataset.tab;
             if (!this._tabMap.has(tabName)) {
@@ -165,15 +174,35 @@ export class DSTabs {
             this._tabMap.get(tabName).buttons.push(button);
         });
 
-        // Associate radios with their following content divs
-        this.radios.forEach((radio, index) => {
+        // Associate Radios (by data-tab)
+        this.radios.forEach(radio => {
             const tabName = radio.dataset.tab;
             if (this._tabMap.has(tabName)) {
                 this._tabMap.get(tabName).radio = radio;
-                // The content div follows the radio input
-                if (this.contents[index]) {
-                    this._tabMap.get(tabName).content = this.contents[index];
-                }
+            }
+        });
+
+        // Associate Content (Improved Logic)
+        // Strategy: Match by data-tab first. If content lacks data-tab, fall back to index/order.
+        const unmappedContents = [...this.contents]; // Copy to track what's used
+
+        // Pass 1: Link content elements that explicitly have data-tab="..."
+        this._tabMap.forEach((data, name) => {
+            const matchIndex = unmappedContents.findIndex(c => c.dataset.tab === name);
+            if (matchIndex > -1) {
+                data.content = unmappedContents[matchIndex];
+                unmappedContents[matchIndex] = null; // Mark as used
+            }
+        });
+
+        // Pass 2: Link remaining content to remaining tabs by order (legacy support)
+        let remainingIndex = 0;
+        const remainingContents = unmappedContents.filter(c => c !== null);
+
+        this._tabMap.forEach((data) => {
+            if (!data.content && remainingContents[remainingIndex]) {
+                data.content = remainingContents[remainingIndex];
+                remainingIndex++;
             }
         });
     }

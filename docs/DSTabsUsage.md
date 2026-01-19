@@ -121,13 +121,57 @@ The plugin expects the following structure:
 | `buttonSelector` | string | `'[data-tab]'` | Selector for tab buttons/links |
 | `radioSelector` | string | `'input[type="radio"][data-tab]'` | Selector for hidden radio inputs |
 | `contentSelector` | string | `'.tab-content'` | Selector for tab content containers |
-| `tabsContainer` | string | `'.tabs'` | Container that holds radios and content |
+| `tabsContainer` | string\|null | `'.tabs'` | Container for radios/content. Set to `null` for flexible mode |
 | `activeClass` | string | `'active'` | Class added to active button |
 | `buttonActiveClass` | string | `'btn-active'` | Additional class for active button |
 | `contentHiddenClass` | string | `'hidden'` | Class to hide inactive content |
 | `disableActive` | boolean | `true` | Disable the active button |
 | `showFirst` | boolean | `true` | Auto-show first tab on init |
 | `onTabChange` | function | `null` | Callback when tab changes |
+
+### Flexible Mode (No Sub-Container)
+
+By default, DSTabs expects radios and content inside a `.tabs` sub-container. If your HTML doesn't use a sub-container, set `tabsContainer` to `null`:
+
+```javascript
+// When buttons, radios, and content are all at the same level
+const tabs = new DSTabs('#app-wrapper', {
+    tabsContainer: null  // Search entire container
+});
+```
+
+```html
+<!-- Flexible structure - no .tabs wrapper needed -->
+<div id="app-wrapper">
+    <button data-tab="home">Home</button>
+    <button data-tab="settings">Settings</button>
+    
+    <input type="radio" data-tab="home" checked />
+    <div class="tab-content">Home content</div>
+    
+    <input type="radio" data-tab="settings" />
+    <div class="tab-content">Settings content</div>
+</div>
+```
+
+> [!TIP]
+> The plugin will also automatically fall back to the main container if the configured `tabsContainer` selector doesn't match any element.
+
+### Content Matching
+
+Content elements are matched to tabs in two passes:
+
+1. **By `data-tab` attribute** (preferred): Content with `data-tab="tabName"` is linked to the matching tab
+2. **By order** (legacy fallback): Remaining content is linked to tabs by their DOM order
+
+```html
+<!-- Explicit matching with data-tab (recommended) -->
+<div class="tab-content" data-tab="settings">Settings content</div>
+
+<!-- Or implicit matching by order (legacy) -->
+<input type="radio" data-tab="home" />
+<div class="tab-content">Home content</div>  <!-- Matched by position -->
+```
 
 ### Using Configuration
 
@@ -153,6 +197,7 @@ You can also configure via data attributes on the container:
     ...
 </div>
 ```
+
 
 ---
 
