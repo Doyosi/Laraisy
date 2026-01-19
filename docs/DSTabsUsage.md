@@ -122,12 +122,42 @@ The plugin expects the following structure:
 | `radioSelector` | string | `'input[type="radio"][data-tab]'` | Selector for hidden radio inputs |
 | `contentSelector` | string | `'.tab-content'` | Selector for tab content containers |
 | `tabsContainer` | string\|null | `'.tabs'` | Container for radios/content. Set to `null` for flexible mode |
+| `tabsContainerGlobal` | boolean | `false` | If true, search `tabsContainer` in document, not inside main container |
 | `activeClass` | string | `'active'` | Class added to active button |
 | `buttonActiveClass` | string | `'btn-active'` | Additional class for active button |
 | `contentHiddenClass` | string | `'hidden'` | Class to hide inactive content |
 | `disableActive` | boolean | `true` | Disable the active button |
 | `showFirst` | boolean | `true` | Auto-show first tab on init |
 | `onTabChange` | function | `null` | Callback when tab changes |
+
+### Global Container Search
+
+When buttons and content are in **completely different parts of the page**, use `tabsContainerGlobal: true` to search for the tabs container anywhere in the document:
+
+```javascript
+// Buttons in #app-wrapper, content in #content-area elsewhere in page
+const tabs = new DSTabs('#app-wrapper', {
+    tabsContainer: '#content-area',
+    tabsContainerGlobal: true  // Search document, not inside #app-wrapper
+});
+```
+
+```html
+<!-- Buttons in header -->
+<div id="app-wrapper">
+    <button data-tab="home">Home</button>
+    <button data-tab="settings">Settings</button>
+</div>
+
+<!-- Content area elsewhere in page -->
+<div id="content-area">
+    <input type="radio" data-tab="home" checked />
+    <div class="tab-content">Home content</div>
+    
+    <input type="radio" data-tab="settings" />
+    <div class="tab-content">Settings content</div>
+</div>
+```
 
 ### Flexible Mode (No Sub-Container)
 

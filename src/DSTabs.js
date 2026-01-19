@@ -28,6 +28,7 @@ export class DSTabs {
         radioSelector: 'input[type="radio"][data-tab]',   // Selector for hidden radio inputs
         contentSelector: '.tab-content',                  // Selector for tab content containers
         tabsContainer: '.tabs',                           // Container that holds radios and content
+        tabsContainerGlobal: false,                       // If true, search tabsContainer in document, not inside main container
 
         // Behavior
         activeClass: 'active',                  // Class to add to active button
@@ -145,9 +146,12 @@ export class DSTabs {
         // 2. Determine Scope for Content/Radios
         // If tabsContainer is configured AND exists, strictly scope to it. 
         // Otherwise, search within the entire main container (flexible mode).
+        // If tabsContainerGlobal is true, search in document instead of main container.
         let searchScope = this.container;
         if (this.cfg.tabsContainer) {
-            const scopedEl = this.container.querySelector(this.cfg.tabsContainer);
+            // Choose where to search: document (global) or inside main container
+            const searchRoot = this.cfg.tabsContainerGlobal ? document : this.container;
+            const scopedEl = searchRoot.querySelector(this.cfg.tabsContainer);
             if (scopedEl) {
                 this.tabsContainer = scopedEl;
                 searchScope = scopedEl;
