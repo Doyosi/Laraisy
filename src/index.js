@@ -1,5 +1,6 @@
 export * from './CodeInput.js';
 export * from './DSAlert.js';
+export * from './DSButtonForm.js';
 export * from './DSAvatar.js';
 export * from './DSDelete.js';
 export * from './DSForm.js';

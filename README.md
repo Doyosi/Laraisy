@@ -37,6 +37,7 @@ DSAlert.fire('Hello World!', 'This is a success message', 'success');
 
 - **[DSAlert](docs/DSAlertUsage.md)**: SweetAlert2-like toast and modal system.
 - **[DSAvatar](docs/DSAvatarUsage.md)**: Avatar file upload with preview and reset. (See code for usage)
+- **[DSButtonForm](docs/DSButtonFormUsage.md)**: Standalone button handler for AJAX actions with loading states.
 - **[DSForm](docs/DSFormUsage.md)**: Robust AJAX form handler with validation display.
 - **[DSDelete](docs/DSDeleteUsage.md)**: Deletion confirmation and handling.
 - **[DSSelect](docs/DSSelectUsage.md)**: Advanced select/dropdown component.
