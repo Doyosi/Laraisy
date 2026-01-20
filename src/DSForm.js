@@ -54,6 +54,8 @@ export class DSForm {
             disableOnSuccess: false,
             successTitle: null,
             errorTitle: null,
+            timer: 3000,
+            timerProgressBar: true,
         };
 
         this.cfg = { ...defaults, ...config };
@@ -523,7 +525,11 @@ export class DSForm {
                 title: this._t('error'),
                 text: msg,
                 icon: 'error',
-                confirmButtonText: 'OK'
+                confirmButtonText: 'OK',
+                showCloseButton: false,
+                showConfirmButton: false,
+                timer: this.cfg.timer || 3000,
+                timerProgressBar: this.cfg.timerProgressBar ?? true,
             });
         }
     }
