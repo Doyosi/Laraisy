@@ -12,23 +12,30 @@ export class DSDelete {
         method: 'DELETE',
         ajaxFunction: 'axios', // axios | fetch
 
-        // Confirmation Dialog
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        // Icons
         icon: 'warning',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel',
+        successIcon: 'success',
+        errorIcon: 'error',
+
+        // Button styling
         confirmButtonColor: 'btn btn-sm btn-error', // Destructive action
 
-        // Success Dialog
-        successTitle: 'Deleted!',
-        successText: 'Your file has been deleted.',
-        successIcon: 'success',
+        // Translations (i18n support)
+        translations: {
+            // Confirmation Dialog
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
 
-        // Error Dialog
-        errorTitle: 'Error!',
-        errorText: 'Something went wrong.',
-        errorIcon: 'error',
+            // Success Dialog
+            successTitle: 'Deleted!',
+            successText: 'Your file has been deleted.',
+
+            // Error Dialog
+            errorTitle: 'Error!',
+            errorText: 'Something went wrong.',
+        },
 
         // Callbacks
         onSuccess: null, // function(response, element)
@@ -36,20 +43,50 @@ export class DSDelete {
         onDelete: null,  // function(element) - before delete, return false to cancel
     };
 
+    static _defaults = {
+        translations: {
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            successTitle: 'Deleted!',
+            successText: 'Your file has been deleted.',
+            errorTitle: 'Error!',
+            errorText: 'Something went wrong.',
+        },
+    };
+
+    /**
+     * Static translation helper
+     * @param {Object} config - Merged config object
+     * @param {string} key - Translation key
+     * @returns {string} Translated string
+     */
+    static _st(config, key) {
+        return (config.translations && config.translations[key]) ||
+            DSDelete._defaults.translations[key] ||
+            key;
+    }
+
     /**
      * Static method for programmatic delete confirmation
      * Usage: DSDelete.confirm({ url, title, text, successMessage, onSuccess })
      */
     static async confirm(options = {}) {
-        const config = { ...DSDelete.defaults, ...options };
+        // Deep merge translations
+        const mergedTranslations = {
+            ...DSDelete.defaults.translations,
+            ...(options.translations || {})
+        };
+        const config = { ...DSDelete.defaults, ...options, translations: mergedTranslations };
 
         const confirmed = await DSAlert.fire({
-            title: config.title || DSDelete.defaults.title,
-            text: config.text || DSDelete.defaults.text,
+            title: DSDelete._st(config, 'title'),
+            text: DSDelete._st(config, 'text'),
             icon: config.icon || DSDelete.defaults.icon,
             showCancelButton: true,
-            confirmButtonText: config.confirmButtonText || DSDelete.defaults.confirmButtonText,
-            cancelButtonText: config.cancelButtonText || DSDelete.defaults.cancelButtonText,
+            confirmButtonText: DSDelete._st(config, 'confirmButtonText'),
+            cancelButtonText: DSDelete._st(config, 'cancelButtonText'),
             confirmButtonColor: config.confirmButtonColor || DSDelete.defaults.confirmButtonColor
         });
 
@@ -80,11 +117,11 @@ export class DSDelete {
                 }
 
                 // Show success message
-                const successMessage = config.successMessage || response.message || DSDelete.defaults.successText;
+                const successMessage = config.successMessage || response.message || DSDelete._st(config, 'successText');
                 await DSAlert.fire({
-                    title: DSDelete.defaults.successTitle,
+                    title: DSDelete._st(config, 'successTitle'),
                     text: successMessage,
-                    icon: DSDelete.defaults.successIcon,
+                    icon: config.successIcon || DSDelete.defaults.successIcon,
                     timer: 2000,
                     timerProgressBar: true
                 });
@@ -98,7 +135,7 @@ export class DSDelete {
             } catch (error) {
                 console.error('DSDelete Error:', error);
 
-                let errorMessage = DSDelete.defaults.errorText;
+                let errorMessage = DSDelete._st(config, 'errorText');
                 if (error.response?.data?.message) {
                     errorMessage = error.response.data.message;
                 } else if (error.data?.message) {
@@ -106,9 +143,9 @@ export class DSDelete {
                 }
 
                 DSAlert.fire({
-                    title: DSDelete.defaults.errorTitle,
+                    title: DSDelete._st(config, 'errorTitle'),
                     text: errorMessage,
-                    icon: DSDelete.defaults.errorIcon
+                    icon: config.errorIcon || DSDelete.defaults.errorIcon
                 });
 
                 if (config.onError) {
@@ -123,7 +160,12 @@ export class DSDelete {
     }
 
     constructor(options = {}) {
-        this.config = { ...DSDelete.defaults, ...options };
+        // Deep merge translations
+        const mergedTranslations = {
+            ...DSDelete.defaults.translations,
+            ...(options.translations || {})
+        };
+        this.config = { ...DSDelete.defaults, ...options, translations: mergedTranslations };
         this._init();
     }
 
@@ -160,15 +202,15 @@ export class DSDelete {
         // Default standard: DELETE request to URL.
 
         const contentTitle = element.dataset.deleteTitle ? `"${element.dataset.deleteTitle}"` : '';
-        const confirmText = contentTitle ? `${this.config.text} ${contentTitle}` : this.config.text;
+        const confirmText = contentTitle ? `${this._t('text')} ${contentTitle}` : this._t('text');
 
         const confirmed = await DSAlert.fire({
-            title: this.config.title,
+            title: this._t('title'),
             text: confirmText,
             icon: this.config.icon,
             showCancelButton: true,
-            confirmButtonText: this.config.confirmButtonText,
-            cancelButtonText: this.config.cancelButtonText,
+            confirmButtonText: this._t('confirmButtonText'),
+            cancelButtonText: this._t('cancelButtonText'),
             confirmButtonColor: this.config.confirmButtonColor
         });
 
@@ -219,11 +261,11 @@ export class DSDelete {
 
     async _handleSuccess(response, element) {
         // Standard Laravel response: { success: true, message: '...' }
-        const message = response.message || this.config.successText;
+        const message = response.message || this._t('successText');
 
         // Fire Success Alert
         await DSAlert.fire({
-            title: this.config.successTitle,
+            title: this._t('successTitle'),
             text: message,
             icon: this.config.successIcon,
             timer: 2000,
@@ -246,7 +288,7 @@ export class DSDelete {
     _handleError(error, element) {
         console.error('DSDelete Error:', error);
 
-        let message = this.config.errorText;
+        let message = this._t('errorText');
         if (error.response && error.response.data && error.response.data.message) {
             message = error.response.data.message;
         } else if (error.data && error.data.message) {
@@ -254,7 +296,7 @@ export class DSDelete {
         }
 
         DSAlert.fire({
-            title: this.config.errorTitle,
+            title: this._t('errorTitle'),
             text: message,
             icon: this.config.errorIcon
         });
@@ -264,6 +306,17 @@ export class DSDelete {
         }
 
         this._emit('delete:error', { error, element });
+    }
+
+    /**
+     * Instance translation helper
+     * @param {string} key - Translation key
+     * @returns {string} Translated string
+     */
+    _t(key) {
+        return (this.config.translations && this.config.translations[key]) ||
+            DSDelete._defaults.translations[key] ||
+            key;
     }
 
     _emit(event, detail = {}) {

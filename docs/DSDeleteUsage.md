@@ -41,12 +41,25 @@ You can customize all text and behavior during initialization.
 ```javascript
 const deletePlugin = new DSDelete({
     selector: '.delete-btn', // Custom selector (default: [data-delete])
+    method: 'DELETE',        // HTTP method (default: DELETE)
+    ajaxFunction: 'axios',   // 'axios' | 'fetch' (default: axios)
     
-    // Custom Text
-    title: 'Silmek istediğinize emin misiniz?',
-    text: 'Bu işlem geri alınamaz!',
-    confirmButtonText: 'Evet, Sil!',
-    cancelButtonText: 'İptal',
+    // Translations (i18n support)
+    translations: {
+        // Confirmation Dialog
+        title: 'Silmek istediğinize emin misiniz?',
+        text: 'Bu işlem geri alınamaz!',
+        confirmButtonText: 'Evet, Sil!',
+        cancelButtonText: 'İptal',
+        
+        // Success Dialog
+        successTitle: 'Silindi!',
+        successText: 'Kayıt başarıyla silindi.',
+        
+        // Error Dialog
+        errorTitle: 'Hata!',
+        errorText: 'Bir şeyler ters gitti.',
+    },
     
     // Callbacks
     onSuccess: function(response, element) {
@@ -55,6 +68,26 @@ const deletePlugin = new DSDelete({
     },
     onError: function(error, element) {
         console.error('Delete failed', error);
+    }
+});
+```
+
+## Static Programmatic Usage
+
+You can also trigger delete confirmation programmatically without DOM elements:
+
+```javascript
+import { DSDelete } from '@doyosi/laraisy';
+
+// Simple usage
+await DSDelete.confirm({
+    url: '/api/users/123',
+    translations: {
+        title: 'Delete User?',
+        text: 'This will permanently remove the user account.'
+    },
+    onSuccess: (response) => {
+        console.log('User deleted', response);
     }
 });
 ```
