@@ -149,6 +149,7 @@ export class DSGOTRenderer {
     showEmpty() {
         const { emptyMessage, emptyIcon } = this.config;
         const target = this.instance.getRenderTarget();
+        const iconHtml = this._renderIcon(emptyIcon, 'text-5xl');
 
         if (this.config.type === 'grid' ||
             (this.config.type === 'gridable' && this.instance.currentView === 'grid')) {
@@ -156,7 +157,7 @@ export class DSGOTRenderer {
             if (this.instance.gridContainer) {
                 this.instance.gridContainer.innerHTML = `
                     <div class="col-span-full text-center py-12 text-base-content/50">
-                        <span class="material-symbols-outlined text-5xl mb-3 block">${emptyIcon}</span>
+                        <span class="mb-3 block">${iconHtml}</span>
                         <p class="text-lg">${emptyMessage}</p>
                     </div>
                 `;
@@ -168,7 +169,7 @@ export class DSGOTRenderer {
                     <tr>
                         <td colspan="100%" class="text-center py-12">
                             <div class="flex flex-col items-center gap-2 text-base-content/50">
-                                <span class="material-symbols-outlined text-5xl">${emptyIcon}</span>
+                                ${iconHtml}
                                 <p class="text-lg">${emptyMessage}</p>
                             </div>
                         </td>
@@ -184,13 +185,15 @@ export class DSGOTRenderer {
     showError(message) {
         const target = this.instance.getRenderTarget();
         const errorMessage = message || this.config.errorMessage;
+        const errorIcon = this.config.errorIcon || 'error';
+        const iconHtml = this._renderIcon(errorIcon, 'text-5xl');
 
         if (this.config.type === 'grid' ||
             (this.config.type === 'gridable' && this.instance.currentView === 'grid')) {
             if (this.instance.gridContainer) {
                 this.instance.gridContainer.innerHTML = `
                     <div class="col-span-full text-center py-12 text-error">
-                        <span class="material-symbols-outlined text-5xl mb-3 block">error</span>
+                        <span class="mb-3 block">${iconHtml}</span>
                         <p class="text-lg">${errorMessage}</p>
                     </div>
                 `;
@@ -201,13 +204,45 @@ export class DSGOTRenderer {
                     <tr>
                         <td colspan="100%" class="text-center py-12 text-error">
                             <div class="flex flex-col items-center gap-2">
-                                <span class="material-symbols-outlined text-5xl">error</span>
+                                ${iconHtml}
                                 <p class="text-lg">${errorMessage}</p>
                             </div>
                         </td>
                     </tr>
                 `;
             }
+        }
+    }
+
+    /**
+     * Render an icon based on the configured icon library.
+     * @param {string} icon - Icon name or HTML
+     * @param {string} sizeClass - Size class to apply (e.g., 'text-5xl')
+     * @returns {string} HTML string for the icon
+     */
+    _renderIcon(icon, sizeClass = '') {
+        const library = this.config.iconLibrary || 'material-symbols';
+
+        switch (library) {
+            case 'material-symbols':
+                return `<span class="material-symbols-outlined ${sizeClass}">${icon}</span>`;
+
+            case 'font-awesome':
+                const faClass = icon.startsWith('fa') ? icon : `fas fa-${icon}`;
+                return `<i class="${faClass} ${sizeClass}"></i>`;
+
+            case 'heroicons':
+                return `<span class="heroicon heroicon-${icon} ${sizeClass}"></span>`;
+
+            case 'phosphor':
+                const phClass = icon.startsWith('ph-') ? `ph ${icon}` : `ph ph-${icon}`;
+                return `<i class="${phClass} ${sizeClass}"></i>`;
+
+            case 'custom':
+                return `<span class="${sizeClass}">${icon}</span>`;
+
+            default:
+                return `<span class="material-symbols-outlined ${sizeClass}">${icon}</span>`;
         }
     }
 

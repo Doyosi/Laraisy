@@ -22,6 +22,16 @@ export class DSNotifications {
             deleteUrl: '/dashboard/notifications/{id}',
             unreadCountUrl: '/dashboard/notifications/unread-count',
             refreshInterval: 60000, // 1 minute
+            /**
+             * Icon library to use for notification icons.
+             * Supported values:
+             * - 'material-symbols' (default): Google Material Symbols Outlined
+             * - 'font-awesome': Font Awesome icons (expects 'fa-icon-name' format)
+             * - 'heroicons': Heroicons (expects icon name, renders as SVG class)
+             * - 'phosphor': Phosphor Icons (expects icon name like 'bell', renders as 'ph ph-bell')
+             * - 'custom': Custom HTML (icon value is used as raw HTML)
+             */
+            iconLibrary: 'material-symbols',
             ...options
         };
 
@@ -239,10 +249,10 @@ export class DSNotifications {
             item.classList.add('bg-primary/5', 'border-l-4', 'border-l-primary');
         }
 
-        // Icon
+        // Icon - render based on configured icon library
         const iconWrapper = item.querySelector('.notification-icon');
         iconWrapper.classList.add(this.getColorClass(notification.color, 'bg'), this.getColorClass(notification.color, 'text'));
-        item.querySelector('.notification-icon .material-symbols-outlined').textContent = notification.icon;
+        this.renderIcon(iconWrapper, notification.icon);
 
         // Content
         item.querySelector('.notification-title').textContent = notification.title;
@@ -290,6 +300,70 @@ export class DSNotifications {
         };
 
         return colors[color]?.[type] || colors.neutral[type];
+    }
+
+    /**
+     * Render an icon into a container based on the configured icon library.
+     * Supports: material-symbols, font-awesome, heroicons, phosphor, custom
+     * @param {HTMLElement} container - The container element to render the icon into
+     * @param {string} icon - The icon identifier (name, class, or HTML depending on library)
+     */
+    renderIcon(container, icon) {
+        // Find existing icon element or create new one
+        let iconElement = container.querySelector('.notification-icon-element');
+
+        // Clear existing icon content
+        if (iconElement) {
+            iconElement.remove();
+        }
+
+        const library = this.options.iconLibrary;
+
+        switch (library) {
+            case 'material-symbols':
+                // Default: Google Material Symbols Outlined
+                iconElement = document.createElement('span');
+                iconElement.className = 'notification-icon-element material-symbols-outlined';
+                iconElement.textContent = icon;
+                break;
+
+            case 'font-awesome':
+                // Font Awesome: expects format like 'fa-bell' or 'fas fa-bell'
+                iconElement = document.createElement('i');
+                // If icon doesn't start with 'fa', assume solid style
+                const faClass = icon.startsWith('fa') ? icon : `fas fa-${icon}`;
+                iconElement.className = `notification-icon-element ${faClass}`;
+                break;
+
+            case 'heroicons':
+                // Heroicons: expects icon name for SVG-based icon classes
+                iconElement = document.createElement('span');
+                iconElement.className = `notification-icon-element heroicon heroicon-${icon}`;
+                break;
+
+            case 'phosphor':
+                // Phosphor Icons: expects icon name like 'bell', renders as 'ph ph-bell'
+                iconElement = document.createElement('i');
+                const phClass = icon.startsWith('ph-') ? `ph ${icon}` : `ph ph-${icon}`;
+                iconElement.className = `notification-icon-element ${phClass}`;
+                break;
+
+            case 'custom':
+                // Custom: icon value is treated as raw HTML
+                const wrapper = document.createElement('span');
+                wrapper.className = 'notification-icon-element';
+                wrapper.innerHTML = icon;
+                iconElement = wrapper;
+                break;
+
+            default:
+                // Fallback to material symbols
+                iconElement = document.createElement('span');
+                iconElement.className = 'notification-icon-element material-symbols-outlined';
+                iconElement.textContent = icon;
+        }
+
+        container.appendChild(iconElement);
     }
 
     updateBadge() {

@@ -142,6 +142,22 @@ export class DSGridOrTable {
         emptyMessage: 'No data found',
         emptyIcon: 'search_off',
         errorMessage: 'Error loading data',
+        errorIcon: 'error',
+
+        /**
+         * Icon library to use for all icons.
+         * Supported values:
+         * - 'material-symbols' (default): Google Material Symbols Outlined
+         * - 'font-awesome': Font Awesome icons (expects 'fa-icon-name' format)
+         * - 'heroicons': Heroicons (expects icon name, renders as SVG class)
+         * - 'phosphor': Phosphor Icons (expects icon name like 'bell', renders as 'ph ph-bell')
+         * - 'custom': Custom HTML (icon value is used as raw HTML)
+         */
+        iconLibrary: 'material-symbols',
+
+        // View toggle icons (for gridable mode)
+        gridViewIcon: 'grid_view',
+        tableViewIcon: 'view_list',
 
         // Filter selectors (passed to DSTableFilter)
         filter_selectors: {}

@@ -44,6 +44,18 @@ export class DSTable {
 
 
         emptyIcon: 'search_off',
+        errorIcon: 'error',
+
+        /**
+         * Icon library to use for table icons.
+         * Supported values:
+         * - 'material-symbols' (default): Google Material Symbols Outlined
+         * - 'font-awesome': Font Awesome icons (expects 'fa-icon-name' format)
+         * - 'heroicons': Heroicons (expects icon name, renders as SVG class)
+         * - 'phosphor': Phosphor Icons (expects icon name like 'warning', renders as 'ph ph-warning')
+         * - 'custom': Custom HTML (icon value is used as raw HTML)
+         */
+        iconLibrary: 'material-symbols',
 
         // Selectors
         tableSelector: 'table',
@@ -241,11 +253,12 @@ export class DSTable {
     }
 
     _showEmpty() {
+        const iconHtml = this._renderIcon(this.config.emptyIcon, 'text-5xl');
         this.tbody.innerHTML = `
                             <tr>
                         <td colspan="100%" class="text-center py-12">
                             <div class="flex flex-col items-center gap-2 text-base-content/50">
-                                <span class="material-symbols-outlined text-5xl">${this.config.emptyIcon}</span>
+                                ${iconHtml}
                                 <p class="text-base">${this.config.table_translations.empty}</p>
                             </div>
                         </td>
@@ -253,17 +266,50 @@ export class DSTable {
     }
 
     _showError(msg) {
+        const iconHtml = this._renderIcon(this.config.errorIcon, 'text-5xl');
         this.tbody.innerHTML =
             `
                     <tr>
                         <td colspan="100%" class="text-center py-12 text-error">
                             <div class="flex flex-col items-center gap-2">
-                                <span class="material-symbols-outlined text-5xl">error</span>
+                                ${iconHtml}
                                 <p class="text-base">${msg || this.config.table_translations.error}</p>
                             </div>
                         </td>
                     </tr>
                 `;
+    }
+
+    /**
+     * Render an icon based on the configured icon library.
+     * @param {string} icon - Icon name or HTML
+     * @param {string} sizeClass - Size class to apply (e.g., 'text-5xl')
+     * @returns {string} HTML string for the icon
+     */
+    _renderIcon(icon, sizeClass = '') {
+        const library = this.config.iconLibrary;
+
+        switch (library) {
+            case 'material-symbols':
+                return `<span class="material-symbols-outlined ${sizeClass}">${icon}</span>`;
+
+            case 'font-awesome':
+                const faClass = icon.startsWith('fa') ? icon : `fas fa-${icon}`;
+                return `<i class="${faClass} ${sizeClass}"></i>`;
+
+            case 'heroicons':
+                return `<span class="heroicon heroicon-${icon} ${sizeClass}"></span>`;
+
+            case 'phosphor':
+                const phClass = icon.startsWith('ph-') ? `ph ${icon}` : `ph ph-${icon}`;
+                return `<i class="${phClass} ${sizeClass}"></i>`;
+
+            case 'custom':
+                return `<span class="${sizeClass}">${icon}</span>`;
+
+            default:
+                return `<span class="material-symbols-outlined ${sizeClass}">${icon}</span>`;
+        }
     }
 
     _toggleLoading(loading) {

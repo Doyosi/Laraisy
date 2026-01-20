@@ -22,13 +22,18 @@ export class DSSelectBox {
     static instances = new Map();
     static instanceCounter = 0;
 
-    static icons = {
+    static defaultIcons = {
         moveRight: `<span class="material-symbols-outlined text-lg">chevron_right</span>`,
         moveLeft: `<span class="material-symbols-outlined text-lg">chevron_left</span>`,
         moveAllRight: `<span class="material-symbols-outlined text-lg">keyboard_double_arrow_right</span>`,
         moveAllLeft: `<span class="material-symbols-outlined text-lg">keyboard_double_arrow_left</span>`,
         search: `<span class="material-symbols-outlined text-sm opacity-50">search</span>`
     };
+
+    // Keep static icons as alias for backward compatibility
+    static get icons() {
+        return DSSelectBox.defaultIcons;
+    }
 
     static defaults = {
         // Data sources
@@ -54,6 +59,10 @@ export class DSSelectBox {
         // Height
         listHeight: '300px',
 
+        // Icons
+        iconLibrary: 'material-symbols', // 'material-symbols' | 'phosphor' | 'font-awesome' | 'heroicons'
+        icons: null, // Override individual icons (merged with library defaults)
+
         // Callbacks
         onChange: null,             // (selectedItems) => {}
         onMove: null,               // (direction, items) => {}
@@ -74,6 +83,10 @@ export class DSSelectBox {
 
         this.cfg = { ...DSSelectBox.defaults, ...config };
 
+        // Resolve icons
+        const libraryIcons = this._getLibraryIcons(this.cfg.iconLibrary);
+        this.icons = { ...libraryIcons, ...(config.icons || {}) };
+
         // State
         this._availableItems = [];
         this._selectedItems = [];
@@ -88,6 +101,43 @@ export class DSSelectBox {
         DSSelectBox.instances.set(this.instanceId, this);
         this.wrapper.dataset.dsSelectboxId = this.instanceId;
     }
+
+    _getLibraryIcons(library) {
+        switch (library) {
+            case 'phosphor':
+                return {
+                    moveRight: `<i class="ph ph-caret-right text-lg"></i>`,
+                    moveLeft: `<i class="ph ph-caret-left text-lg"></i>`,
+                    moveAllRight: `<i class="ph ph-caret-double-right text-lg"></i>`,
+                    moveAllLeft: `<i class="ph ph-caret-double-left text-lg"></i>`,
+                    search: `<i class="ph ph-magnifying-glass text-sm opacity-50"></i>`
+                };
+            case 'font-awesome':
+                return {
+                    moveRight: `<i class="fas fa-chevron-right text-lg"></i>`,
+                    moveLeft: `<i class="fas fa-chevron-left text-lg"></i>`,
+                    moveAllRight: `<i class="fas fa-angle-double-right text-lg"></i>`,
+                    moveAllLeft: `<i class="fas fa-angle-double-left text-lg"></i>`,
+                    search: `<i class="fas fa-search text-sm opacity-50"></i>`
+                };
+            case 'heroicons':
+                // Heroicons (using basic SVG/class structure assuming user has CSS or JS for it, or just span markers)
+                // For valid heroicons we usually need SVG, but here using placeholders if not provided
+                // This is a basic fallback map
+                return {
+                    moveRight: `<span class="heroicon heroicon-chevron-right text-lg"></span>`,
+                    moveLeft: `<span class="heroicon heroicon-chevron-left text-lg"></span>`,
+                    moveAllRight: `<span class="heroicon heroicon-chevron-double-right text-lg"></span>`,
+                    moveAllLeft: `<span class="heroicon heroicon-chevron-double-left text-lg"></span>`,
+                    search: `<span class="heroicon heroicon-magnifying-glass text-sm opacity-50"></span>`
+                };
+            case 'material-symbols':
+            default:
+                return DSSelectBox.defaultIcons;
+        }
+    }
+
+
 
     static getInstance(element) {
         const el = typeof element === 'string' ? document.querySelector(element) : element;
@@ -122,7 +172,7 @@ export class DSSelectBox {
                                    class="input input-sm input-bordered w-full pl-8" 
                                    placeholder="${this.cfg.searchPlaceholder}"
                                    data-search="available">
-                            <span class="absolute left-2 top-1/2 -translate-y-1/2">${DSSelectBox.icons.search}</span>
+                            <span class="absolute left-2 top-1/2 -translate-y-1/2">${this.icons.search}</span>
                         </div>
                     </div>
                     <div class="flex-1 overflow-y-auto p-2" style="height: ${this.cfg.listHeight}" data-list="available">
@@ -141,16 +191,16 @@ export class DSSelectBox {
                 <!-- Transfer Buttons (Center) -->
                 <div class="flex flex-col justify-center gap-2">
                     <button type="button" class="btn btn-sm btn-outline" data-action="move-right" title="Move selected to right">
-                        ${DSSelectBox.icons.moveRight}
+                        ${this.icons.moveRight}
                     </button>
                     <button type="button" class="btn btn-sm btn-outline" data-action="move-all-right" title="Move all to right">
-                        ${DSSelectBox.icons.moveAllRight}
+                        ${this.icons.moveAllRight}
                     </button>
                     <button type="button" class="btn btn-sm btn-outline" data-action="move-left" title="Move selected to left">
-                        ${DSSelectBox.icons.moveLeft}
+                        ${this.icons.moveLeft}
                     </button>
                     <button type="button" class="btn btn-sm btn-outline" data-action="move-all-left" title="Move all to left">
-                        ${DSSelectBox.icons.moveAllLeft}
+                        ${this.icons.moveAllLeft}
                     </button>
                 </div>
 
@@ -163,7 +213,7 @@ export class DSSelectBox {
                                    class="input input-sm input-bordered w-full pl-8" 
                                    placeholder="${this.cfg.searchPlaceholder}"
                                    data-search="selected">
-                            <span class="absolute left-2 top-1/2 -translate-y-1/2">${DSSelectBox.icons.search}</span>
+                            <span class="absolute left-2 top-1/2 -translate-y-1/2">${this.icons.search}</span>
                         </div>
                     </div>
                     <div class="flex-1 overflow-y-auto p-2" style="height: ${this.cfg.listHeight}" data-list="selected">

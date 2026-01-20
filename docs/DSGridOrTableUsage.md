@@ -194,14 +194,94 @@ const gridable = new DSGridOrTable('#dataContainer', {
 }
 ```
 
-### Messages
+### Messages & Icons
 
 ```javascript
 {
     emptyMessage: 'No data found',
-    emptyIcon: 'search_off',               // Material Symbol icon
+    emptyIcon: 'search_off',               // Icon for empty state
     errorMessage: 'Error loading data',
+    errorIcon: 'error',                    // Icon for error state
+    
+    // View toggle icons (gridable mode)
+    gridViewIcon: 'grid_view',             // Icon for grid toggle button
+    tableViewIcon: 'view_list',            // Icon for table toggle button
+    
+    /**
+     * Icon library to use.
+     * Supported values:
+     * - 'material-symbols' (default): Google Material Symbols Outlined
+     * - 'font-awesome': Font Awesome icons
+     * - 'heroicons': Heroicons
+     * - 'custom': Custom HTML
+     */
+    iconLibrary: 'material-symbols',
 }
+```
+
+### Icons Configuration
+
+DSGridOrTable supports multiple icon libraries. Configure once and all icons (empty state, error state, view toggle) will use that library.
+
+#### Using Material Symbols (Default)
+```javascript
+const grid = new DSGridOrTable('#container', {
+    type: 'gridable',
+    ajax_url: '/api/data',
+    // Default - no icon config needed
+});
+```
+
+#### Using Font Awesome
+```javascript
+const grid = new DSGridOrTable('#container', {
+    type: 'gridable',
+    ajax_url: '/api/data',
+    iconLibrary: 'font-awesome',
+    emptyIcon: 'folder-open',          // Renders as 'fas fa-folder-open'
+    errorIcon: 'exclamation-circle',   // Renders as 'fas fa-exclamation-circle'
+    gridViewIcon: 'th-large',          // Grid toggle button
+    tableViewIcon: 'list',             // Table toggle button
+});
+```
+
+#### Using Heroicons
+```javascript
+const grid = new DSGridOrTable('#container', {
+    type: 'gridable',
+    ajax_url: '/api/data',
+    iconLibrary: 'heroicons',
+    emptyIcon: 'inbox',
+    errorIcon: 'exclamation-triangle',
+    gridViewIcon: 'squares-2x2',
+    tableViewIcon: 'bars-3',
+});
+```
+
+#### Using Phosphor Icons
+```javascript
+const grid = new DSGridOrTable('#container', {
+    type: 'gridable',
+    ajax_url: '/api/data',
+    iconLibrary: 'phosphor',
+    emptyIcon: 'magnifying-glass',     // Renders as 'ph ph-magnifying-glass'
+    errorIcon: 'warning',              // Renders as 'ph ph-warning'
+    gridViewIcon: 'squares-four',      // Grid toggle button
+    tableViewIcon: 'list-dashes',      // Table toggle button
+});
+```
+
+#### Using Custom HTML/SVG
+```javascript
+const grid = new DSGridOrTable('#container', {
+    type: 'gridable',
+    ajax_url: '/api/data',
+    iconLibrary: 'custom',
+    emptyIcon: '<svg class="w-12 h-12" ...>...</svg>',
+    errorIcon: '<svg class="w-12 h-12" ...>...</svg>',
+    gridViewIcon: '<svg class="w-5 h-5" ...>...</svg>',
+    tableViewIcon: '<svg class="w-5 h-5" ...>...</svg>',
+});
 ```
 
 ### Callbacks

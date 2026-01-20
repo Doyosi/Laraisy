@@ -77,6 +77,63 @@ const table = new DSTable('#users-table-wrapper', {
 | `template_html` | string | `null` | HTML string with `{{ key }}` placeholders. |
 | `template_function` | function | `null` | Function returning row HTML: `(row, index) => html`. |
 | `template_response` | string | `'html_response'` | Field name in data object containing pre-rendered HTML. |
+|Icons|
+| `emptyIcon` | string | `'search_off'` | Icon shown when table has no data. |
+| `errorIcon` | string | `'error'` | Icon shown when data loading fails. |
+| `iconLibrary` | string | `'material-symbols'` | Icon library: `'material-symbols'`, `'font-awesome'`, `'heroicons'`, `'custom'`. |
+
+## Icons Configuration
+
+DSTable supports multiple icon libraries for the empty state and error icons.
+
+### Using Material Symbols (Default)
+```javascript
+const table = new DSTable('#table-wrapper', {
+    ajax_url: '/api/data',
+    emptyIcon: 'search_off',
+    errorIcon: 'error'
+});
+```
+
+### Using Font Awesome
+```javascript
+const table = new DSTable('#table-wrapper', {
+    ajax_url: '/api/data',
+    iconLibrary: 'font-awesome',
+    emptyIcon: 'folder-open',      // Renders as 'fas fa-folder-open'
+    errorIcon: 'exclamation-circle' // Renders as 'fas fa-exclamation-circle'
+});
+```
+
+### Using Heroicons
+```javascript
+const table = new DSTable('#table-wrapper', {
+    ajax_url: '/api/data',
+    iconLibrary: 'heroicons',
+    emptyIcon: 'inbox',
+    errorIcon: 'exclamation-triangle'
+});
+```
+
+### Using Phosphor Icons
+```javascript
+const table = new DSTable('#table-wrapper', {
+    ajax_url: '/api/data',
+    iconLibrary: 'phosphor',
+    emptyIcon: 'magnifying-glass',  // Renders as 'ph ph-magnifying-glass'
+    errorIcon: 'warning-circle'     // Renders as 'ph ph-warning-circle'
+});
+```
+
+### Using Custom HTML/SVG
+```javascript
+const table = new DSTable('#table-wrapper', {
+    ajax_url: '/api/data',
+    iconLibrary: 'custom',
+    emptyIcon: '<svg class="w-12 h-12" ...>...</svg>',
+    errorIcon: '<svg class="w-12 h-12" ...>...</svg>'
+});
+```
 
 
 ## Filters
