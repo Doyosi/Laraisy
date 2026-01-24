@@ -31,7 +31,7 @@ export class DSNotifications {
              * - 'phosphor': Phosphor Icons (expects icon name like 'bell', renders as 'ph ph-bell')
              * - 'custom': Custom HTML (icon value is used as raw HTML)
              */
-            iconLibrary: 'material-symbols',
+            iconLibrary: 'phosphor',
             ...options
         };
 
@@ -308,15 +308,14 @@ export class DSNotifications {
      * @param {HTMLElement} container - The container element to render the icon into
      * @param {string} icon - The icon identifier (name, class, or HTML depending on library)
      */
+    /**
+     * Render an icon into a container based on the configured icon library.
+     */
     renderIcon(container, icon) {
-        // Find existing icon element or create new one
-        let iconElement = container.querySelector('.notification-icon-element');
+        // 1. CLEAR: Wipe any existing content (fixes the empty <i> issue)
+        container.innerHTML = '';
 
-        // Clear existing icon content
-        if (iconElement) {
-            iconElement.remove();
-        }
-
+        let iconElement;
         const library = this.options.iconLibrary;
 
         switch (library) {
@@ -328,28 +327,26 @@ export class DSNotifications {
                 break;
 
             case 'font-awesome':
-                // Font Awesome: expects format like 'fa-bell' or 'fas fa-bell'
                 iconElement = document.createElement('i');
-                // If icon doesn't start with 'fa', assume solid style
                 const faClass = icon.startsWith('fa') ? icon : `fas fa-${icon}`;
                 iconElement.className = `notification-icon-element ${faClass}`;
                 break;
 
             case 'heroicons':
-                // Heroicons: expects icon name for SVG-based icon classes
                 iconElement = document.createElement('span');
                 iconElement.className = `notification-icon-element heroicon heroicon-${icon}`;
                 break;
 
             case 'phosphor':
-                // Phosphor Icons: expects icon name like 'bell', renders as 'ph ph-bell'
                 iconElement = document.createElement('i');
-                const phClass = icon.startsWith('ph-') ? `ph ${icon}` : `ph ph-${icon}`;
-                iconElement.className = `notification-icon-element ${phClass}`;
+                // Check if the backend sent 'ph-plus-circle' or just 'plus-circle'
+                // If it already has 'ph-', don't double add it.
+                // Also add 'text-lg' or similar sizing if needed.
+                const phName = icon.startsWith('ph-') ? icon : `ph-${icon}`;
+                iconElement.className = `notification-icon-element ph ${phName} text-lg`;
                 break;
 
             case 'custom':
-                // Custom: icon value is treated as raw HTML
                 const wrapper = document.createElement('span');
                 wrapper.className = 'notification-icon-element';
                 wrapper.innerHTML = icon;
@@ -357,7 +354,7 @@ export class DSNotifications {
                 break;
 
             default:
-                // Fallback to material symbols
+                // Fallback
                 iconElement = document.createElement('span');
                 iconElement.className = 'notification-icon-element material-symbols-outlined';
                 iconElement.textContent = icon;
@@ -426,14 +423,3 @@ export class DSNotifications {
     }
 }
 
-// Auto-initialize if not imported as module
-if (typeof window !== 'undefined') {
-    window.DSNotifications = DSNotifications;
-
-    document.addEventListener('DOMContentLoaded', () => {
-        // Auto-init if drawer exists
-        if (document.getElementById('notification-drawer')) {
-            window.notificationsInstance = new DSNotifications();
-        }
-    });
-}
