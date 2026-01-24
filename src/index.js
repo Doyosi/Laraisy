@@ -16,3 +16,4 @@ export * from './DSSvgFetch.js';
 export * from './DSTable.js';
 export * from './DSTabs.js';
 export * from './DSUpload.js';
+export * from './DSSvgUpload.js';

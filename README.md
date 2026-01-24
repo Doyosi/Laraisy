@@ -52,6 +52,7 @@ DSAlert.fire('Hello World!', 'This is a success message', 'success');
 - **[CodeInput](docs/CodeInputUsage.md)**: Multi-input verification code handler.
 - **[DSLogout](docs/DSLogoutUsage.md)**: Secure AJAX logout handler.
 - **[DSSvgFetch](docs/DSSvgFetchUsage.md)**: Inline SVG injector.
+- **[DSSvgUpload](docs/DSSvgUploadUsage.md)**: SVG icon uploader.
 
 ## Dependencies
 

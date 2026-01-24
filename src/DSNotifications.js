@@ -364,7 +364,7 @@ export class DSNotifications {
     }
 
     updateBadge() {
-        // Drawer badge
+        // 1. Existing Logic: Update internal badges
         if (this.badge) {
             if (this.unreadCount > 0) {
                 this.badge.textContent = this.unreadCount > 99 ? '99+' : this.unreadCount;
@@ -374,7 +374,6 @@ export class DSNotifications {
             }
         }
 
-        // Topbar badge
         if (this.topbarBadge) {
             if (this.unreadCount > 0) {
                 this.topbarBadge.classList.remove('hidden');
@@ -382,6 +381,15 @@ export class DSNotifications {
                 this.topbarBadge.classList.add('hidden');
             }
         }
+
+        // 2. NEW: Dispatch event for external components
+        // This emits a custom event that other buttons can listen to
+        window.dispatchEvent(new CustomEvent('ds-notifications:update', {
+            detail: {
+                unreadCount: this.unreadCount,
+                hasUnread: this.unreadCount > 0
+            }
+        }));
     }
 
     showLoading() {
