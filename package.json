@@ -1,6 +1,6 @@
 {
     "name": "@doyosi/laraisy",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "type": "module",
     "description": "Missing Laravel / Tailwind v4.1 & Daisy UI 5.1.14 Javascript Plugins",
     "main": "src/index.js",
