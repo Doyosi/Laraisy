@@ -282,9 +282,20 @@ class DSSimpleSlider {
                 if (url && this.contentEl) {
                     this.contentEl.style.cursor = 'pointer';
                     this.contentEl.onclick = () => window.location.href = url;
+
+                    // Also update any <a> inside (e.g. .ds-slider-link)
+                    const linkEl = this.contentEl.querySelector('a.ds-slider-link') || this.contentEl.querySelector('a');
+                    if (linkEl) {
+                        linkEl.href = url;
+                    }
                 } else if (this.contentEl) {
                     this.contentEl.style.cursor = 'default';
                     this.contentEl.onclick = null;
+
+                    const linkEl = this.contentEl.querySelector('a.ds-slider-link') || this.contentEl.querySelector('a');
+                    if (linkEl) {
+                        linkEl.href = '#';
+                    }
                 }
 
                 this.contentEl.classList.remove('opacity-0');
