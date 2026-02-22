@@ -283,8 +283,8 @@ class DSSimpleSlider {
                     this.contentEl.style.cursor = 'pointer';
                     this.contentEl.onclick = () => window.location.href = url;
 
-                    // Also update any <a> inside (e.g. .ds-slider-link)
-                    const linkEl = this.contentEl.querySelector('a.ds-slider-link') || this.contentEl.querySelector('a');
+                    // Also update any <a> inside (e.g. .ds-slider-link) or if the contentEl itself is an <a>
+                    const linkEl = this.contentEl.tagName.toLowerCase() === 'a' ? this.contentEl : (this.contentEl.querySelector('a.ds-slider-link') || this.contentEl.querySelector('a'));
                     if (linkEl) {
                         linkEl.href = url;
                     }
