@@ -255,7 +255,7 @@ export class DSForm {
                     const key = p.slice(0, -2);
                     if (!Array.isArray(cur[key])) cur[key] = [];
                     if (cur[key].length === 0 || typeof cur[key][cur[key].length - 1] !== 'object') cur[key].push({});
-                    cur = cur[key][cur.length - 1];
+                    cur = cur[key][cur[key].length - 1];
                 } else {
                     if (!cur[p] || typeof cur[p] !== 'object') cur[p] = {};
                     cur = cur[p];

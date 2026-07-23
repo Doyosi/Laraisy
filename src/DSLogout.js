@@ -61,6 +61,7 @@ export class DSLogout {
 
         // Per-element state & unbind storage
         this._bound = new WeakMap(); // el -> handler
+        this._boundElements = [];   // track refs for cleanup
         this._isDelegated = !!delegate;
         this._delegated = null;
 
@@ -88,9 +89,11 @@ export class DSLogout {
             return;
         }
         // Unbind direct handlers
-        for (const [el, handler] of this._entries(this._bound)) {
-            el.removeEventListener(this.eventType, handler);
+        for (const el of this._boundElements) {
+            const handler = this._bound.get(el);
+            if (handler) el.removeEventListener(this.eventType, handler);
         }
+        this._boundElements = [];
         this._bound = new WeakMap();
     }
 
@@ -128,6 +131,7 @@ export class DSLogout {
         };
         el.addEventListener(this.eventType, handler);
         this._bound.set(el, handler);
+        this._boundElements.push(el);
     }
 
     _bindDelegated() {

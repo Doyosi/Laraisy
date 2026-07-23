@@ -101,7 +101,7 @@ export class DSNotifications {
         this.showLoading();
 
         try {
-            const response = await axios.get(this.options.fetchUrl);
+            const response = await this._request(this.options.fetchUrl);
             const data = response.data;
 
             if (data.success) {
@@ -120,7 +120,7 @@ export class DSNotifications {
 
     async fetchUnreadCount() {
         try {
-            const response = await axios.get(this.options.unreadCountUrl);
+            const response = await this._request(this.options.unreadCountUrl);
             if (response.data.success) {
                 this.unreadCount = response.data.count;
                 this.updateBadge();
@@ -133,7 +133,7 @@ export class DSNotifications {
     async markAsRead(id) {
         try {
             const url = this.options.readUrl.replace('{id}', id);
-            const response = await axios.post(url);
+            const response = await this._request(url, 'POST');
 
             if (response.data.success) {
                 // Update local state
@@ -163,7 +163,7 @@ export class DSNotifications {
 
     async markAllAsRead() {
         try {
-            const response = await axios.post(this.options.readAllUrl);
+            const response = await this._request(this.options.readAllUrl, 'POST');
 
             if (response.data.success) {
                 this.notifications.forEach(n => n.read = true);
@@ -190,7 +190,7 @@ export class DSNotifications {
     async deleteNotification(id) {
         try {
             const url = this.options.deleteUrl.replace('{id}', id);
-            const response = await axios.delete(url);
+            const response = await this._request(url, 'DELETE');
 
             if (response.data.success) {
                 // Remove from local state
@@ -409,6 +409,31 @@ export class DSNotifications {
 
     hideEmpty() {
         this.empty?.classList.add('hidden');
+    }
+
+    async _request(url, method = 'GET', data = null) {
+        if (window.axios) {
+            const config = { method, url };
+            if (data) config.data = data;
+            return await window.axios(config);
+        } else if (window.fetch) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                }
+            };
+            if (data) options.body = JSON.stringify(data);
+            const res = await fetch(url, options);
+            const json = await res.json();
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return { data: json, status: res.status };
+        } else {
+            throw new Error('No AJAX library available');
+        }
     }
 
     startAutoRefresh() {

@@ -179,11 +179,11 @@ export class DSAvatar {
 
     _toggleLoading(show) {
         if (show) {
-            this.loadingOverlay.classList.remove('hidden');
+            if (this.loadingOverlay) this.loadingOverlay.classList.remove('hidden');
             if (this.triggerBtn) this.triggerBtn.disabled = true;
             if (this.removeBtn) this.removeBtn.disabled = true;
         } else {
-            this.loadingOverlay.classList.add('hidden');
+            if (this.loadingOverlay) this.loadingOverlay.classList.add('hidden');
             if (this.triggerBtn) this.triggerBtn.disabled = false;
             if (this.removeBtn) this.removeBtn.disabled = false;
         }
