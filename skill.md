@@ -1,6 +1,6 @@
 # AI Agent Skill Reference — `@doyosi/laraisy`
 
-> **Package:** `@doyosi/laraisy` · **Version:** 1.0.16 · **License:** MIT  
+> **Package:** `@doyosi/laraisy` · **Version:** 1.0.17 · **License:** MIT  
 > **Module System:** ESM (`"type": "module"`) · **Entry Point:** `src/index.js`  
 > **Types:** `dist/index.d.ts`  
 > **Stack:** Laravel + Tailwind CSS v4.1 + DaisyUI 5.1.14  
